@@ -1,0 +1,47 @@
+package com.patient.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.patient.dao.PatientData;
+import com.patient.repository.Repository;
+
+@Service
+public class ServiceLayer {
+	
+	@Autowired
+	Repository repo;
+
+	public List<PatientData> getPatient(PatientData data) {
+		List<PatientData> l=new ArrayList<>();
+		List<PatientData> l2= new ArrayList<PatientData>();
+		l=repo.findAll();
+		 for(int i=0;i<l.size();i++) {
+			 if(l.get(i).getAge()>40) {
+				 l2.add(l.get(i));
+			 }
+		 }
+		
+		
+		
+		 return l2;
+	}
+
+	public PatientData add(PatientData data) {
+		
+		
+		return repo.save(data);
+	}
+	
+public PatientData addp(PatientData data) {
+		
+		if(data.getDisease().equals("maleria")) {
+			data.setDoctor(data.getDoctor());
+		}
+		return repo.save(data);
+	}
+
+}

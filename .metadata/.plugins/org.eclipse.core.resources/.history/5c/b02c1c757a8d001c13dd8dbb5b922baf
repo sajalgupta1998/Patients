@@ -1,0 +1,14 @@
+package com.patient.service;
+
+import java.util.List;
+
+import com.patient.dao.PatientData;
+
+public class ServiceLayer {
+
+	public List<PatientData> getPatient() {
+		
+		return null;
+	}
+
+}

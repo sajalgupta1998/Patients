@@ -1,0 +1,28 @@
+package com.patient.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.patient.dao.PatientData;
+import com.patient.service.ServiceLayer;
+
+
+
+
+
+@RestController
+public class Controller {
+
+	@Autowired(required = true)
+	ServiceLayer servicelayer;
+	
+	
+	@GetMapping("/getAllPatientsDetails")
+	public List<PatientData> getAllPatient(){
+		return servicelayer.getPatient();
+	}
+	
+}
