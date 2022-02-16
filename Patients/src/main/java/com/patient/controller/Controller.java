@@ -1,12 +1,15 @@
 package com.patient.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,22 +28,39 @@ public class Controller {
 		return servicelayer.showAll();
 	}
 	
-	@GetMapping("showByDisease/{diseaseName}")
-	public List<PatientData> 
-	
-	@GetMapping("/greaterThan60")
-	public List<PatientData> getAllPatient(@RequestBody PatientData data){
-		return servicelayer.getPatient(data);
+	@GetMapping("/showPatientWithMaxAge")
+	public PatientData showMaxagePatient() {
+		return servicelayer.showthatPatient();
 	}
 	
-	@PostMapping("/addNewPatients")
-	public void adddata(@RequestBody List<PatientData> data) throws Exception {
-		 servicelayer.add(data);
+	@GetMapping("/startWithAnyAlphabetWithDocter/{str}/{doctorname}")
+	public List<PatientData> showdisease(@PathVariable("str") String s1,@PathVariable("doctorname") String s2){
+		return servicelayer.showByDisease(s1,s2);
 	}
 	
-//	@PostMapping("adddoctor")
-//	public PatientData addda(@RequestBody PatientData data) {
-//		
-//		return servicelayer.add(data);
-//	}
+	@GetMapping("/seniorCitizenWithDisease/{DiseaseName}")
+	public List<PatientData> getAllPatient(@PathVariable("DiseaseName") String str){
+		return servicelayer.getPatient(str);
+	}
+	
+	@PostMapping("/addNewPatientWithDisease")
+	public String adddata(@RequestBody PatientData data) {
+		 return servicelayer.add(data);
+	}
+	
+	@PostMapping("/addNewPatientWithAgeRestriction/{age}")
+	public String addData(@RequestBody PatientData data,@PathVariable("age") int id) {
+		 return servicelayer.adds(data,id);
+	}
+	
+	@DeleteMapping("/deleteAllWithDiseaseName/{diseaseName}")
+	public String deleteData(@RequestBody PatientData data,@PathVariable("diseaseName") String s) {
+		return servicelayer.delete(data,s);
+	}
+
+	@DeleteMapping("/deleteAll")
+	public String deleteData() {
+		return servicelayer.deleteAll();
+	}
+	
 }

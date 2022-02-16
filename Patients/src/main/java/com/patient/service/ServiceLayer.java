@@ -1,19 +1,18 @@
 package com.patient.service;
 
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.patient.dao.PatientData;
 import com.patient.repository.Repository;
-import com.sun.net.httpserver.HttpsConfigurator;
 
 @Service
 public class ServiceLayer {
@@ -22,55 +21,75 @@ public class ServiceLayer {
 	Repository repo;
 	
 	public List<PatientData> showAll() {
-		
 		return repo.findAll();
 	}
 	
-	
-
-	public List<PatientData> getPatient(PatientData data) {
+	public List<PatientData> showByDisease(String s1,String s2) {
 		List<PatientData> l=repo.findAll();
-		List<PatientData> l2=l.stream().filter(dat->dat.getAge()>40).collect(Collectors.toList());
+		return l.stream().filter(val->val.getName().startsWith(s1)).filter(val->val.getDoctor().equalsIgnoreCase(s2)).collect(Collectors.toList());
+		 
+	}
+	
+	public PatientData showthatPatient() {
+		List<PatientData> l=repo.findAll();
+		
+		return Collections.max(l,Comparator.comparingInt(value->value.getName().length()));
+		 
+	}
+
+	
+	public List<PatientData> getPatient(String str) {
+		List<PatientData> l=repo.findAll();
+		List<PatientData> l2=l.stream().filter(dat->dat.getAge()>40).filter(val->val.getDisease().equalsIgnoreCase(str)).collect(Collectors.toList());
 		 return l2;
 	}
 
-	public void add(List<PatientData> data) throws Exception {
-		String str[]= {"Diabetic","High cholestrol","Dengue","Covid","Anthrax","Cholera","brain injury","Fever"};
-//		List<String> l2=Arrays.asList(str);
-		int count=0;
-//		
-//		List<PatientData> l=(List<PatientData>) data.stream().filter(val->val.equals(l2)).count());
-		//str.stream().filter(s->s.startsWith("C")).forEachOrdered(val->System.out.println(val));
-		for(int i=0;i<str.length;i++) {
-		if(((PatientData) data).getDisease().equalsIgnoreCase(str[i])) {
-			count ++;
-		}
-		}
-		
-		if(count>0) {
-			System.out.println("data added successfully done ");
-			repo.save(data);
+	public String add(PatientData data)  {
+		List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
+     	
+		if(l.contains(data.getDisease())) {
+			 repo.save(data);
 		}else {
-			 throw new Exception("please enter disease correctly");
-			
+			return "Please Enter The Correct disease";
 		}
-		
+		return "Patients Details Added Successfully";
 	}
+		
+		
 	
-public PatientData addp(PatientData data) {
-		
-		if(data.getDisease().equals("maleria")) {
-			data.setDoctor(data.getDoctor());
+
+public String adds(PatientData data,int id) {
+	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
+	//l.stream().filter(data->data)
+	if(l.contains(data.getDisease()) && data.getAge()>id) {
+		repo.save(data);
+	}else {
+		return "Please Verify the Age";
+	}
+	return "Patients Details Added Successfully";
+}
+
+
+public String delete(PatientData data,String s) {
+	List<PatientData> l=repo.findAll();
+	for(PatientData d:l) {
+		if(d.getDisease().equalsIgnoreCase(s)) {
+			repo.delete(d);
 		}
-		return repo.save(data);
 	}
 
-
-
-public List<PatientData> showByDisease(PatientData data) {
-	repo.fi
-	return null;
+	return "successfully Deleted";
 }
+
+public String deleteAll() {
+	repo.deleteAll();
+	return "";
+}
+
+
+
+
+
 
 
 
