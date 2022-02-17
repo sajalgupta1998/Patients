@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.patient.dao.PatientData;
+import com.patient.exception.AgeRestrictionError;
 import com.patient.exception.DiseaseNotFoundException;
 import com.patient.repository.Repository;
 
@@ -20,6 +21,9 @@ public class ServiceLayer {
 	Repository repo;
 	
 	public List<PatientData> showAll() {
+//		if(repo.findAll().isEmpty()) {
+//		throw new DataIsEmpty("Data is Empty");
+//	}
 		return repo.findAll();
 	}
 	
@@ -55,13 +59,14 @@ public class ServiceLayer {
 	}
 		
 		
-public String adds(PatientData data,int id) {
+public String adds(PatientData data) {
 	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
-	//l.stream().filter(data->data)
-	if(l.contains(data.getDisease()) && data.getAge()>id) {
+	
+	if(l.contains(data.getDisease()) && data.getAge()>18) {
 		repo.save(data);
 	}else {
-		return "Please Verify the Age";
+		 throw new AgeRestrictionError("Age Restrictions and Please enter correct disease");
+		 
 	}
 	return "Patients Details Added Successfully";
 }
@@ -80,8 +85,55 @@ public String delete(PatientData data,String s) {
 
 public String deleteAll() {
 	repo.deleteAll();
-	return "";
+	return "Details deleted successfully";
 }
+
+public String updatedata(PatientData data,String str) {
+	  List<PatientData> p= repo.findAll();
+//	  for(PatientData pt:p) {
+//		  if(pt.getName().equalsIgnoreCase(str)) {
+//			 PatientData aa= repo.findById(pt.getId()).get();
+//			 aa.setName(data.getName());
+//			 repo.save(aa);
+//		  }
+//	  }
+	 List<PatientData> d= p.stream().map(val->{
+		 if(val.getName().equalsIgnoreCase(str)) {
+			 val.setName(data.getName());
+		 }
+		 return val;
+	 }).collect(Collectors.toList());
+	 repo.saveAll(d);
+	 return "Update patient name";
+}
+
+public String updatedoc(PatientData data, String str) {
+	List<PatientData> p= repo.findAll();
+	List<PatientData> d= p.stream().map(val->{
+		 if(val.getDoctor().equalsIgnoreCase(str)) {
+			 val.setDoctor(data.getDoctor());
+		 }
+		 return val;
+	 }).collect(Collectors.toList());
+	 repo.saveAll(d);
+	return "Updated";
+}
+
+//public String updateAge(PatientData data, String str) {
+//	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
+//	List<PatientData> p= repo.findAll();
+//	List<PatientData> d= p.stream().map(val->{
+//		if(l.contains(val.getDisease()) {
+//		 if(val.getDisease().equalsIgnoreCase(str)) {
+//			 val.setDoctor(data.getDoctor());
+//		 }
+//		}
+//		 return val;
+//	 }).collect(Collectors.toList());
+//	 repo.saveAll(d);
+//	
+//	return null;
+//}
 
 
 
