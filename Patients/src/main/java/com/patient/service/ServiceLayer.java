@@ -1,8 +1,6 @@
 package com.patient.service;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.patient.dao.PatientData;
+import com.patient.exception.DiseaseNotFoundException;
 import com.patient.repository.Repository;
 
 @Service
@@ -30,10 +29,10 @@ public class ServiceLayer {
 		 
 	}
 	
-	public PatientData showthatPatient() {
+	public Optional<PatientData> showthatPatient() {
 		List<PatientData> l=repo.findAll();
 		
-		return Collections.max(l,Comparator.comparingInt(value->value.getName().length()));
+		return l.stream().max(Comparator.comparingInt(value->value.getName().length()));
 		 
 	}
 
@@ -44,20 +43,18 @@ public class ServiceLayer {
 		 return l2;
 	}
 
-	public String add(PatientData data)  {
+	public String add(PatientData data)   {
 		List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
      	
 		if(l.contains(data.getDisease())) {
-			 repo.save(data);
+			repo.save(data);
 		}else {
-			return "Please Enter The Correct disease";
+			 throw new DiseaseNotFoundException("wrong disease");
 		}
 		return "Patients Details Added Successfully";
 	}
 		
 		
-	
-
 public String adds(PatientData data,int id) {
 	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
 	//l.stream().filter(data->data)

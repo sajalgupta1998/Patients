@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+import org.springframework.lang.NonNull;
+
 @Entity
 @Table(name="Patients")
 public class PatientData {
@@ -13,7 +16,7 @@ public class PatientData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+	@NonNull
 	private String name;
 	private String disease;
 	private int age;
@@ -26,6 +29,7 @@ public class PatientData {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public String getName() {
 		return name;
 	}
