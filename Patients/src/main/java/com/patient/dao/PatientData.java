@@ -5,8 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="Patients")
@@ -15,12 +16,18 @@ public class PatientData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@NonNull
+	
+	@NotEmpty(message = "Patient name should not be empty")
+	@Size(min = 3,max = 20,message = "name size should be 3-20 charachter")
 	private String name;
+	
+	@NotEmpty(message = "Disease name should not be empty")
 	private String disease;
+	
+	@Positive(message = "Age should not be negetive or zero or Empty")
 	private int age;
 	
-	
+	@NotEmpty(message = "Doctor name should not be empty")
 	private String doctor;
 	public int getId() {
 		return id;

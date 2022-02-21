@@ -6,7 +6,7 @@ public class DataIsEmpty extends RuntimeException {
 	
 	public DataIsEmpty(String msg) {
 		super(msg);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	

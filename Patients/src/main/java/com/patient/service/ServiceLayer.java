@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.patient.dao.PatientData;
 import com.patient.exception.AgeRestrictionError;
+import com.patient.exception.DataIsEmpty;
 import com.patient.exception.DiseaseNotFoundException;
 import com.patient.repository.Repository;
 
@@ -21,30 +22,37 @@ public class ServiceLayer {
 	Repository repo;
 	
 	public List<PatientData> showAll() {
-//		if(repo.findAll().isEmpty()) {
-//		throw new DataIsEmpty("Data is Empty");
-//	}
+		if(repo.findAll().isEmpty()) {
+		throw new DataIsEmpty("Data is Empty");
+	}
 		return repo.findAll();
 	}
 	
+	public Optional<PatientData> showthatPatient() {
+		if(repo.findAll().isEmpty()) {
+			throw new DataIsEmpty("Data is Empty");
+		}else {
+		List<PatientData> l=repo.findAll();
+		return l.stream().max(Comparator.comparingInt(value->value.getName().length()));
+		}
+	}
 	public List<PatientData> showByDisease(String s1,String s2) {
+		if(repo.findAll().isEmpty()) {
+			throw new DataIsEmpty("Data is Empty");
+		}else {
 		List<PatientData> l=repo.findAll();
 		return l.stream().filter(val->val.getName().startsWith(s1)).filter(val->val.getDoctor().equalsIgnoreCase(s2)).collect(Collectors.toList());
-		 
+		}
 	}
-	
-	public Optional<PatientData> showthatPatient() {
-		List<PatientData> l=repo.findAll();
-		
-		return l.stream().max(Comparator.comparingInt(value->value.getName().length()));
-		 
-	}
-
 	
 	public List<PatientData> getPatient(String str) {
+		if(repo.findAll().isEmpty()) {
+			throw new DataIsEmpty("Data is Empty");
+		}else {
 		List<PatientData> l=repo.findAll();
 		List<PatientData> l2=l.stream().filter(dat->dat.getAge()>40).filter(val->val.getDisease().equalsIgnoreCase(str)).collect(Collectors.toList());
 		 return l2;
+		}
 	}
 
 	public String add(PatientData data)   {
@@ -62,15 +70,19 @@ public class ServiceLayer {
 public String adds(PatientData data) {
 	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
 	
-	if(l.contains(data.getDisease()) && data.getAge()>18) {
+	if(!l.contains(data.getDisease()) ) {
+		 throw new AgeRestrictionError(" Please enter correct disease");
+		
+	}else if(!(data.getAge()>18)) {
+		throw new AgeRestrictionError("Age Restrictions ");
+		
+		}
+	else {
 		repo.save(data);
-	}else {
-		 throw new AgeRestrictionError("Age Restrictions and Please enter correct disease");
 		 
 	}
 	return "Patients Details Added Successfully";
 }
-
 
 public String delete(PatientData data,String s) {
 	List<PatientData> l=repo.findAll();
@@ -79,7 +91,6 @@ public String delete(PatientData data,String s) {
 			repo.delete(d);
 		}
 	}
-
 	return "successfully Deleted";
 }
 
@@ -104,7 +115,7 @@ public String updatedata(PatientData data,String str) {
 		 return val;
 	 }).collect(Collectors.toList());
 	 repo.saveAll(d);
-	 return "Update patient name";
+	 return "patient name is update";
 }
 
 public String updatedoc(PatientData data, String str) {
@@ -116,30 +127,22 @@ public String updatedoc(PatientData data, String str) {
 		 return val;
 	 }).collect(Collectors.toList());
 	 repo.saveAll(d);
-	return "Updated";
+	return "List is updated";
 }
 
-//public String updateAge(PatientData data, String str) {
-//	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
-//	List<PatientData> p= repo.findAll();
-//	List<PatientData> d= p.stream().map(val->{
-//		if(l.contains(val.getDisease()) {
-//		 if(val.getDisease().equalsIgnoreCase(str)) {
-//			 val.setDoctor(data.getDoctor());
-//		 }
-//		}
-//		 return val;
-//	 }).collect(Collectors.toList());
-//	 repo.saveAll(d);
-//	
-//	return null;
-//}
-
-
-
-
-
-
-
+public String updateDisease(PatientData data, String str) {
+	List<String> l= Arrays.asList("diabetic","high cholestrol","dengue","covid","anthrax","cholera","brain injury","fever");
+	List<PatientData> list= repo.findAll();
+	List<PatientData> filterList= list.stream().filter(val->val.getDisease().equalsIgnoreCase(str)).collect(Collectors.toList());
+     for(PatientData pd:filterList) {
+    	 pd.setDisease(data.getDisease());
+    	 if(l.contains(pd.getDisease())) {
+    		 repo.save(pd);
+    	 }else {
+    		 throw new DiseaseNotFoundException("please enter correct disease");
+    	 }
+     }	
+	return "List is updated";
+}
 
 }

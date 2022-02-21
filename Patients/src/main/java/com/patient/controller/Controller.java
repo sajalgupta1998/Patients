@@ -1,14 +1,19 @@
 package com.patient.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.patient.dao.PatientData;
@@ -21,60 +26,70 @@ public class Controller {
 	@Autowired(required = true)
 	ServiceLayer servicelayer;
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/showAllPatients")
-	public ResponseEntity<PatientData> showPatient() {
-		return new ResponseEntity( servicelayer.showAll(),HttpStatus.OK);
+	public List<PatientData> showPatient() {
+		return servicelayer.showAll();
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/showPatientWithMaxAge")
-	public ResponseEntity<PatientData> showMaxagePatient() {
-		return new ResponseEntity( servicelayer.showthatPatient(),HttpStatus.OK);
+	public Optional<PatientData> showMaxagePatient() {
+		return servicelayer.showthatPatient();
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/startWithAnyAlphabetWithDocter/{str}/{doctorname}")
-	public ResponseEntity<PatientData> showdisease(@PathVariable("str") String s1,@PathVariable("doctorname") String s2){
-		return new ResponseEntity(servicelayer.showByDisease(s1,s2),HttpStatus.OK);
+	public List<PatientData> showdisease(@PathVariable("str") String s1,@PathVariable("doctorname") String s2){
+		return servicelayer.showByDisease(s1,s2);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/seniorCitizenWithDisease/{DiseaseName}")
-	public ResponseEntity<PatientData> getAllPatient(@PathVariable("DiseaseName") String str){
-		return new ResponseEntity(servicelayer.getPatient(str),HttpStatus.OK);
+	public List<PatientData> getAllPatient(@PathVariable("DiseaseName") String str){
+		return servicelayer.getPatient(str);
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/addNewPatientWithDisease")
-	public ResponseEntity adddata(@RequestBody PatientData data) {
-		 return new ResponseEntity(servicelayer.add(data),HttpStatus.CREATED);
+	public String adddata(@Valid @RequestBody PatientData data) {
+		 return servicelayer.add(data);
 	}
 	
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/addNewPatientWithAgeRestriction")
-	public ResponseEntity addData(@RequestBody PatientData data) {
-		 return new ResponseEntity(servicelayer.adds(data),HttpStatus.CREATED);
+	public String addData(@Valid @RequestBody PatientData data) {
+		 return servicelayer.adds(data);
 	}
 	
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	@DeleteMapping("/deleteAllWithDiseaseName/{diseaseName}")
-	public ResponseEntity deleteData(@RequestBody PatientData data,@PathVariable("diseaseName") String s) {
-		return new ResponseEntity(servicelayer.delete(data,s),HttpStatus.ACCEPTED);
+	public String deleteData(@RequestBody PatientData data,@PathVariable("diseaseName") String s) {
+		return servicelayer.delete(data,s);
 	}
 
 	@DeleteMapping("/deleteAll")
-	public ResponseEntity deleteData() {
-		return new ResponseEntity(servicelayer.deleteAll(),HttpStatus.ACCEPTED);
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public String deleteData() {
+		return servicelayer.deleteAll();
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
     @PutMapping("updatePatientName/{name}")
-    public ResponseEntity update(@RequestBody PatientData data,@PathVariable("name") String str) {
-    	return new ResponseEntity(servicelayer.updatedata(data,str),HttpStatus.OK);
+    public String update(@Valid @RequestBody PatientData data,@PathVariable("name") String str) {
+    	return servicelayer.updatedata(data,str);
     }
     
+	@ResponseStatus(HttpStatus.OK)
     @PutMapping("UpdateAllSimilarDoctor/{name}")
-    public ResponseEntity updateDoc(@RequestBody PatientData data,@PathVariable("name") String str) {
-    	return new ResponseEntity(servicelayer.updatedoc(data,str),HttpStatus.OK);
+    public String updateDoc(@Valid @RequestBody PatientData data,@PathVariable("name") String str) {
+    	return servicelayer.updatedoc(data,str);
     }
     
-//    @PutMapping("UpdateDisease/{disease}")
-//    public ResponseEntity updateAge(@RequestBody PatientData data,@PathVariable("disease") String str) {
-//    	return new ResponseEntity(servicelayer.updateAge(data,str),HttpStatus.OK);
-//    }
-	
+	@ResponseStatus(HttpStatus.OK)
+    @PutMapping("UpdateDiseaseAndPatientAge/{disease}")
+    public String updateAge(@Valid @RequestBody PatientData data,@PathVariable("disease") String str) {
+    	return servicelayer.updateDisease(data,str);
+    }
 	
 }
