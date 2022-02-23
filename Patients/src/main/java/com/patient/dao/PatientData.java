@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 @Table(name="Patients")
 public class PatientData {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -27,6 +28,18 @@ public class PatientData {
 	@Positive(message = "Age should not be negetive or zero or Empty")
 	private int age;
 	
+	public PatientData(int id, String name,String disease,int age,String doctor) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.disease = disease;
+		this.age = age;
+		this.doctor = doctor;
+	}
+	public PatientData() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	@NotEmpty(message = "Doctor name should not be empty")
 	private String doctor;
 	public int getId() {

@@ -28,6 +28,14 @@ public class ServiceLayer {
 		return repo.findAll();
 	}
 	
+	
+	
+	public ServiceLayer(Repository repo) {
+		this.repo = repo;
+	}
+
+
+
 	public Optional<PatientData> showthatPatient() {
 		if(repo.findAll().isEmpty()) {
 			throw new DataIsEmpty("Data is Empty");
