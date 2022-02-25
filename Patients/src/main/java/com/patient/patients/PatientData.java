@@ -1,4 +1,4 @@
-package com.patient.dao;
+package com.patient.patients;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +38,7 @@ public class PatientData {
 	}
 	public PatientData() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	@NotEmpty(message = "Doctor name should not be empty")
 	private String doctor;

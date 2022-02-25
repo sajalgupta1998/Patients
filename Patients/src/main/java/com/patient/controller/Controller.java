@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.patient.dao.PatientData;
+import com.patient.patients.PatientData;
 import com.patient.service.ServiceLayer;
 
 
@@ -28,68 +28,69 @@ public class Controller {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/showAllPatients")
-	public List<PatientData> showPatient() {
-		return servicelayer.showAll();
+	public List<PatientData> showAllPatients() {
+		return servicelayer.getAllPatients();
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/showPatientWithMaxAge")
 	public Optional<PatientData> showMaxagePatient() {
-		return servicelayer.showthatPatient();
+		return servicelayer.getMaxagePatient();
 	}
-	
+	//show patient name start with any character with doctor name/startingCharacter/doctorName
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping("/startWithAnyAlphabetWithDocter/{str}/{doctorname}")
-	public List<PatientData> showdisease(@PathVariable("str") String s1,@PathVariable("doctorname") String s2){
-		return servicelayer.showByDisease(s1,s2);
+	@GetMapping("/startWithAnyAlphabetWithDocter/{startingCharacter}/{doctorname}")
+	public List<PatientData> showStartingCharacterAndDocter(@PathVariable("startingCharacter") String character,@PathVariable("doctorname") String doctorname){
+		return servicelayer.getStartingCharacterAndDoctor(character,doctorname);
 	}
-	
+	//seniorCitizen/diseaseName
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/seniorCitizenWithDisease/{DiseaseName}")
-	public List<PatientData> getAllPatient(@PathVariable("DiseaseName") String str){
-		return servicelayer.getPatient(str);
+	public List<PatientData> seniorCitizenWithDisease(@PathVariable("DiseaseName") String str){
+		return servicelayer.getseniorCitizenWithDisease(str);
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/addNewPatientWithDisease")
-	public String adddata(@Valid @RequestBody PatientData data) {
-		 return servicelayer.add(data);
+	public String addNewPatientWithDisease(@Valid @RequestBody PatientData data) {
+		 return servicelayer.addPatientWithDisease(data);
 	}
-	
+	//correct age with above 18 year 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/addNewPatientWithAgeRestriction")
 	public String addData(@Valid @RequestBody PatientData data) {
-		 return servicelayer.adds(data);
+		 return servicelayer.addPatientWithAgeRestriction(data);
 	}
 	
+	//enter the endPoint and disease name
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@DeleteMapping("/deleteAllWithDiseaseName/{diseaseName}")
-	public String deleteData(@RequestBody PatientData data,@PathVariable("diseaseName") String s) {
-		return servicelayer.delete(data,s);
+	public String deleteData(@PathVariable("diseaseName") String s) {
+		return servicelayer.deleteAllWithDiseaseName(s);
 	}
 
 	@DeleteMapping("/deleteAll")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public String deleteData() {
+	public String deleteAll() {
 		return servicelayer.deleteAll();
 	}
-	
+	//only update patient name
 	@ResponseStatus(HttpStatus.OK)
-    @PutMapping("updatePatientName/{name}")
-    public String update(@Valid @RequestBody PatientData data,@PathVariable("name") String str) {
-    	return servicelayer.updatedata(data,str);
+    @PutMapping("updatePatientName/{patientName}")
+    public String update(@Valid @RequestBody PatientData data,@PathVariable("patientName") String str) {
+    	return servicelayer.updatePatientName(data,str);
     }
-    
+    //update all similar doctor name
 	@ResponseStatus(HttpStatus.OK)
-    @PutMapping("UpdateAllSimilarDoctor/{name}")
-    public String updateDoc(@Valid @RequestBody PatientData data,@PathVariable("name") String str) {
-    	return servicelayer.updatedoc(data,str);
+    @PutMapping("UpdateAllSimilarDoctor/{docterName}")
+    public String updateDoc(@Valid @RequestBody PatientData data,@PathVariable("patientName") String str) {
+    	return servicelayer.UpdateAllSimilarDoctor(data,str);
     }
-    
+    //updating all the similar disease name
 	@ResponseStatus(HttpStatus.OK)
-    @PutMapping("UpdateDiseaseAndPatientAge/{disease}")
+    @PutMapping("UpdateAllSimilarDisease/{disease}")
     public String updateAge(@Valid @RequestBody PatientData data,@PathVariable("disease") String str) {
-    	return servicelayer.updateDisease(data,str);
+    	return servicelayer.UpdateAllSimilarDisease(data,str);
     }
 	
 }

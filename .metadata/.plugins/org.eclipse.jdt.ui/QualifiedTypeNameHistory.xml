@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.patient.DieaseNotFoundException"/>
     <fullyQualifiedTypeName name="java.sql.Date"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ControllerAdvice"/>
     <fullyQualifiedTypeName name="org.springframework.web.context.request.WebRequest"/>
@@ -48,7 +47,6 @@
     <fullyQualifiedTypeName name="org.mockito.junit.MockitoJUnitRunner"/>
     <fullyQualifiedTypeName name="org.mockito.Mock"/>
     <fullyQualifiedTypeName name="org.junit.jupiter.api.BeforeEach"/>
-    <fullyQualifiedTypeName name="org.mockito.MockitoAnnotations"/>
     <fullyQualifiedTypeName name="org.junit.jupiter.api.Test"/>
     <fullyQualifiedTypeName name="com.patient.service.ServiceLayer"/>
     <fullyQualifiedTypeName name="com.google.common.net.MediaType"/>
@@ -56,8 +54,10 @@
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="org.springframework.test.web.servlet.MockMvc"/>
     <fullyQualifiedTypeName name="org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc"/>
-    <fullyQualifiedTypeName name="org.springframework.boot.test.mock.mockito.MockBean"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
-    <fullyQualifiedTypeName name="com.patient.exception.DataIsEmpty"/>
     <fullyQualifiedTypeName name="org.mockito.InjectMocks"/>
+    <fullyQualifiedTypeName name="org.springframework.boot.test.mock.mockito.MockBean"/>
+    <fullyQualifiedTypeName name="org.mockito.MockitoAnnotations"/>
+    <fullyQualifiedTypeName name="org.springframework.boot.test.context.SpringBootTest"/>
+    <fullyQualifiedTypeName name="com.patient.exception.DataIsEmpty"/>
 </qualifiedTypeNameHistroy>
